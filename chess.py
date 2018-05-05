@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+import string
 
 #      0   1   2   3   4   5   6   7
 row1=['R','N','B','K','Q','B','N','R']
@@ -15,7 +16,7 @@ row8=['r','n','b','q','k','b','n','r']
 board=[row1,row2,row3,row4,row5,row6,row7,row8]
 
 def printChessPiece(letter):
-  
+  pass
 
 def printRow(row):
   column = 0
@@ -60,7 +61,55 @@ def askNextMove():
   printBoard(board)
   print("What's your move?")
   print(">>> ", end='')
-    
+  
+def checkNextMove(command):
+  current_row = 8 - (ord(command[0]) - ord('0'))
+  current_col = ord(command[1]) - ord('a')
+  current_piece = board[current_row][current_col]
+  
+
+def checkKnightMove(command):
+  current_row = 8 - (ord(command[0]) - ord('0'))
+  current_col = ord(command[1]) - ord('a')
+  next_row = 8 - (ord(command[2]) - ord('0'))
+  next_col = ord(command[3]) - ord('a')
+  if next_row == current_row + 2 \
+     and next_col == current_col - 1:
+      return True
+  elif next_row == current_row + 2 \
+     and next_col == current_col + 1:
+      return True
+  elif next_row == current_row + 1 \
+     and next_col == current_col + 2:
+      return True
+  elif next_row == current_row + 1 \
+     and next_col == current_col - 2:
+      return True
+  elif next_row == current_row - 1 \
+     and next_col == current_col - 2:
+      return True
+  elif next_row == current_row - 2 \
+     and next_col == current_col - 1:
+      return True
+  elif next_row == current_row - 2 \
+     and next_col == current_col + 1:
+      return True
+  elif next_row == current_row - 1 \
+     and next_col == current_col + 2:
+      return True
+  else:
+      return False
+
+# 2c4c
+def makeNextMove(command):
+  current_row = 8 - (ord(command[0]) - ord('0'))
+  current_col = ord(command[1]) - ord('a')
+  current_piece = board[current_row][current_col]
+  next_row = 8 - (ord(command[2]) - ord('0'))
+  next_col = ord(command[3]) - ord('a')
+  board[next_row][next_col] = current_piece
+  board[current_row][current_col] = ' '
+
 print("Let's play chess!")
 command = 0
 while command != 'quit':
@@ -69,7 +118,7 @@ while command != 'quit':
   if command == 'quit':
     break
   elif checkCommand(command):
-    pass
+    makeNextMove(command)
   else:
     pass
   
