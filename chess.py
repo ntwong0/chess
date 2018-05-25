@@ -4,7 +4,7 @@ from __future__ import print_function
 import string
 
 #      0   1   2   3   4   5   6   7
-row1=['R','N','B','K','Q','B','N','R']
+row1=['R','N','B','Q','K','B','N','R']
 row2=['P','P','P','P','P','P','P','P']
 row3=[' ',' ',' ',' ',' ',' ',' ',' ']
 row4=list(row3)
@@ -66,8 +66,67 @@ def checkNextMove(command):
   current_row = 8 - (ord(command[0]) - ord('0'))
   current_col = ord(command[1]) - ord('a')
   current_piece = board[current_row][current_col]
-  
-
+  if current_piece is 'n' or current_piece is 'N':
+    if checkKnightMove(command):
+      makeNextMove(command)
+    else:
+      hey_thats_a_bad_move(current_piece)
+  if current_piece is 'r' or current_piece is 'R':
+    if checkRookMove(command):
+      makeNextMove(command)
+    else:
+      hey_thats_a_bad_move(current_piece)
+      
+def hey_thats_a_bad_move(current_piece):
+    print("Hey, that's a bad move for ", end='')
+    if current_piece is 'n' or current_piece is 'N':
+      print("a knight")
+    elif current_piece is 'r' or current_piece is 'R':
+      print("a rook")
+    elif current_piece is 'b' or current_piece is 'B':
+      print("a bishop")
+    elif current_piece is 'p' or current_piece is 'P':
+      print("a pawn")
+    elif current_piece is 'q' or current_piece is 'Q':
+      print("a queen")
+    elif current_piece is 'k' or current_piece is 'K':
+      print("a king")
+      
+def checkRookMove(command):
+  current_row = 8 - (ord(command[0]) - ord('0'))
+  current_col = ord(command[1]) - ord('a')
+  current_piece = board[current_row][current_col]
+  next_row = 8 - (ord(command[2]) - ord('0'))
+  next_col = ord(command[3]) - ord('a')
+  direction = 0
+  cursor = 0
+  if current_col is next_col:
+    if current_row < next_row:
+      direction = 1
+    else:
+      direction = -1
+    cursor = current_row
+    while cursor != next_row:
+      if board[cursor][next_col] != ' ':
+        return False
+      else:
+        cursor = cursor + direction
+    return True
+  elif current_row == next_row:
+    if current_col < next_col:
+      direction = 1
+    else:
+      direction = -1
+    cursor = current_col
+    while cursor != next_col:
+      if board[next_row][cursor] != ' ':
+        return False
+      else:
+        cursor = cursor + direction
+    return True
+  else:
+    return False
+      
 def checkKnightMove(command):
   current_row = 8 - (ord(command[0]) - ord('0'))
   current_col = ord(command[1]) - ord('a')
@@ -100,7 +159,6 @@ def checkKnightMove(command):
   else:
       return False
 
-# 2c4c
 def makeNextMove(command):
   current_row = 8 - (ord(command[0]) - ord('0'))
   current_col = ord(command[1]) - ord('a')
@@ -118,7 +176,7 @@ while command != 'quit':
   if command == 'quit':
     break
   elif checkCommand(command):
-    makeNextMove(command)
+    checkNextMove(command)
   else:
     pass
   
