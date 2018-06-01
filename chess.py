@@ -3,6 +3,10 @@
 from __future__ import print_function
 import string
 
+black = 1 # UPPER CASE
+white = 2 # Lower case
+current_player = white
+
 #      0   1   2   3   4   5   6   7
 row1=['R','N','B','Q','K','B','N','R']
 row2=['P','P','P','P','P','P','P','P']
@@ -14,6 +18,24 @@ row7=['p','p','p','p','p','p','p','p']
 row8=['r','n','b','q','k','b','n','r']
 
 board=[row1,row2,row3,row4,row5,row6,row7,row8]
+
+def change_current_player():
+  if current_player == white:
+    current_player = black
+  elif current_player == black:
+    current_player = white
+
+def print_current_player():
+  if current_player == white:
+      print("It's white's turn")
+  else:
+      print("It's black's turn")
+      
+def get_owner_of_piece(current_piece):
+  if 65 <= ord(current_piece) and ord(current_piece) <= 90:
+    return black
+  elif 97 <= ord(current_piece) and ord(current_piece) <= 122:
+    return white
 
 def printChessPiece(letter):
   pass
@@ -59,6 +81,7 @@ def checkCommand(command):
 def askNextMove():
   print()
   printBoard(board)
+  printCurrentPlayer()
   print("What's your move?")
   print(">>> ", end='')
   
@@ -66,16 +89,24 @@ def checkNextMove(command):
   current_row = 8 - (ord(command[0]) - ord('0'))
   current_col = ord(command[1]) - ord('a')
   current_piece = board[current_row][current_col]
-  if current_piece is 'n' or current_piece is 'N':
-    if checkKnightMove(command):
-      makeNextMove(command)
-    else:
-      hey_thats_a_bad_move(current_piece)
-  if current_piece is 'r' or current_piece is 'R':
-    if checkRookMove(command):
-      makeNextMove(command)
-    else:
-      hey_thats_a_bad_move(current_piece)
+  target_row = 8 - (ord(command[2]) - ord('0'))
+  target_col = ord(command[3]) - ord('a')
+  target_piece = board[target_row][target_col]
+  if get_owner_of_piece(current_piece) != current_player:
+    print("Hey that's not your piece")
+  elif get_owner_of_piece(target_piece) == current_player:
+    print("Hey you can't eat your own piece")
+  else:
+    if current_piece is 'n' or current_piece is 'N':
+      if checkKnightMove(command):
+        makeNextMove(command)
+      else:
+        hey_thats_a_bad_move(current_piece)
+    if current_piece is 'r' or current_piece is 'R':
+      if checkRookMove(command):
+        makeNextMove(command)
+      else:
+        hey_thats_a_bad_move(current_piece)
       
 def hey_thats_a_bad_move(current_piece):
     print("Hey, that's a bad move for ", end='')
